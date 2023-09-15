@@ -1,0 +1,32 @@
+## Mission 2: Abengers, Assemble!
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+
+df = pd.read_csv('/content/charcters_stats.csv')
+
+# 캐릭터 중 능력 수치의 합이 가장 큰 캐릭터는 누구인가?
+df.sort_values('Total',ascending=False).head(1)
+
+# 좋은 캐릭터와 나쁜 캐릭터의 능력치들의 수치 분포를 보여라.
+compare_df = df.drop('Total',axis=1)
+compare_df = compare_df.loc[compare_df['Alignment']!='neutral']
+compare_df = compare_df.groupby('Alignment').mean(numeric_only=True).T.reset_index(names='Ability')
+
+# 선그래프
+plt.plot(compare_df['Ability'],compare_df['bad'],label='bad')
+plt.plot(compare_df['Ability'],compare_df['good'],label='good')
+plt.legend()
+plt.title('Bad vs Good')
+plt.show()
+
+# 막대그래프
+fig, ax = plt.subplots(figsize=(8,6))
+ax.bar(compare_df['Ability'], compare_df['bad'], label='bad')
+ax.bar(compare_df['Ability'], compare_df['good'], label='good')
+ax.set_title('Bad vs Good')
+ax.legend()
+fig.show()
